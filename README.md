@@ -34,3 +34,8 @@ make a modify on this Github.
 
 ### questions
 卧槽不能那一套再来一遍吧
+
+###
+git add .
+git commit -m"提交说明"
+git push origin master
