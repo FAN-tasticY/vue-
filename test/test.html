@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //对呀 现在我们看看构造函数里面的this指向的是谁啊
+        //卧槽 this是谁调用那么就指向谁 因为new属于是自身调用了自身，所以this就是指向了自身是吗 是这个意思吗？？？真的是
+        function Phone(name){
+            this.name = name
+        }
+        const shouji = new Phone('我爱你')
+        console.log(shouji.name);
+
+
+        const apple = new Phone({
+            //现在这里面的this是window啊
+            en:this,
+        })
+        console.log(apple);
+
+        //结果是obj啊
+        let obj = {
+            change:function(){
+                console.log(this);
+                const content = new Phone(this)
+                console.log(content.name);
+            },
+            aini:'zhenhao'
+        }
+        //obj.change()
+
+
+        //结果是window
+        function demo(){
+            console.log(this);
+            const content = new Phone(this)
+            console.log('name',content.name);
+        }
+
+        //这里加上了new就相当于自己调用自己了是吗 然后this指向了自己 然后再将自己变成了一个对象然后就是完事了
+        const hauwei = new Phone({
+            test:function(){
+                //主要就是研究我们的this指向问题 最后一个test了然后先不考虑了
+                //啊 构造函数里面穿this指向的到底是谁 好像是他们的vue里面做了一些处理 所以构造函数里面传参然后this指向的才是vue
+                //但是我们的这里并没有进行任何的处理 所以指的就是 谁调用那么this就指向谁喽
+                console.log(this,'哎呀我去了 这不就是name那个对象吗 哈哈哈真是醉了啊 真的是哈哈哈');
+                return '在这里最后一次 杨帆我爱你了'
+            }
+        })
+        //那你说现在我们调用那个函数 那么这个this指向谁呢？？？ 你说它会不会指向华为呢？？？ 难道会是name吗 而name指的又是一个对象吗？？？
+        console.log(hauwei.name.test());
+        console.log(hauwei.name,'你好啊 我就是那个name啊');
+
+        
+        function Hello(name){
+            this.name = name
+            this.push()
+            this.replace()
+        }
+        //他有一个方法的重写
+        Hello.prototype.push = function(_this){
+            console.log('@',this);
+            console.log('---------------------');
+            console.log(_this);
+        }
+        const originalPush = Hello.prototype.push
+        
+        Hello.prototype.push = function(){
+            console.log('hello');
+            console.log('world');
+            //意思是不管在哪里 只要直接进行函数调用的话那么this就是指向window是吗
+            //如果没猜错的话 一个this是hello 一个this是window 哈哈 有点紧张呢
+            // this的指向完全取决于函数调用的位置；
+            //enmmm 先这样记着吧 大概只要是直接调用函数的话那么那个函数的this指向就是window了
+            console.log(this);
+            console.log('我爱你');
+            //函数调用相当于全局调用吧
+            originalPush(this)
+            console.log('######################');
+            console.log('修改了this指向');
+            originalPush.call(this,'我爱你')
+        }
+        Hello.prototype.replace = function(){
+            console.log('replace',this);
+        }
+        const YF = new Hello('杨帆')
+
+
+
+        function World(name){
+            this.name = name
+            this.say()
+            this.rap()
+        }
+        World.prototype = {
+            say:function(){
+                console.log('Hello World');
+            },
+            rap:function(){
+                console.log('唱跳rap');
+            }
+        }
+
+        const me = new World('nihao')
+
+        function fn1(){
+            console.log(this,'我是fn1');
+            function fn2(){
+                console.log(this,'我是fn2');
+            }
+            fn2()
+        }
+        fn1()
+
+        //突然好像写递归函数啊
+        function layer(a){
+            if(a <= 1) return 1
+            return layer(a-1) + layer(a-2)
+        }
+        console.log(layer(20));
+    </script>
+</body>
+</html>
