@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./a.css">
+</head>
+<body>
+    <div class="zhenhao nihao">
+        <div style="width: 20px;height: 20px;margin: auto;margin-top: 49px;" class="limiande">
+        </div>
+    </div>
+
+    <button id="throttle">函数节流</button>
+    <button id="debounce">函数防抖</button>
+    <button id="test">函数测试</button>
+
+    <div id="1" style="width: 200px;height: 200px;background-color: cadetblue;">
+        <div id="2" style="width: 50px;height: 50px;background-color: yellowgreen;"></div>
+    </div>
+
+    <div class="nihao active">
+        <div class="item"></div>
+    </div>
+
+    <script>
+        function change1(params){
+            console.log('我执行了',this,params);
+        }
+
+        //这个是节流函数 如果一直点击的话那么就进行周期性调用的
+        function throttle(callback,delay){
+            let preTime = 0
+            return function(event){
+                const currentTime = Date.now()
+                if(currentTime - preTime > delay){
+                    callback.call(this,event)
+                    preTime = currentTime
+                }
+            }
+        }
+
+        //函数防抖 只有最后一次点击是好使的
+        function debounce(callback,delay){
+            //我知道了 原来是前面使用let之类的东西声明了 那么下面的就不可以再进行声明了就完事了
+            let timer = false
+            return function(event){
+                console.log('我执行了',timer);
+                if(timer){
+                    //也就是说咱家这里清除的全都是上一次的定时器 而下面的全都是新的，所以就是不会影响到下面的函数执行得
+                    clearTimeout(timer)
+                }
+                timer = setTimeout(() => {
+                    callback.call(this,event)                    
+                }, delay);
+                
+            }
+        }
+
+        function debounce2(callback,delay){
+            //这个是老师的写法
+                return function(event){
+                    //callback相当于全局吧 全局身上挂属性如果只是内部的话挂完之后好像就消失了
+                    //如果说没有那个函数执行完了没有干掉的话，那么我们就是可以访问得到 干掉了那么就访问不到了
+                    console.log(callback.timer);
+                    if(callback.hasOwnProperty('timer')){
+                        clearTimeout(callback.timer)
+                    }
+
+                    callback.timer = setTimeout(() => {
+                       callback.call(this,event)
+                       //我就是没有搞懂那个delete是 干啥的  是不是干掉了以后我们就访问不到了
+                       delete callback.timer
+                    }, delay);
+            }
+        }
+        //在这里是一定要使用那个function函数，因为箭头函数的话不能绑定this属性 一般的普通函数才可以绑定this指向
+        document.getElementById('throttle').onclick = throttle(change1,3000)
+        document.getElementById('debounce').onclick = debounce(change1,3000)
+        document.getElementById('test').onclick = debounce2(change1,3000)
+        //这样会报错的
+        // woaini.name='我爱你'
+        // console.log(woaini.name);
+
+        function test(event){
+            console.log(event.target);
+        }
+
+        document.getElementById('1').onclick = test
+
+    </script>
+</body>
+</html>

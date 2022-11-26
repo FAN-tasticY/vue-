@@ -1,0 +1,26 @@
+.nihao {
+  height: 100px;
+  background-color: rebeccapurple;
+  overflow: hidden;
+}
+.nihao.zhenhao {
+  width: 100px;
+}
+.nihao .limiande {
+  background-color: red;
+}
+.nihao:hover .limiande {
+  background-color: greenyellow;
+}
+.nihao:hover .limiande:hover .woaini {
+  background-color: #adc;
+}
+.nihao.active {
+  background-color: yellowgreen;
+  height: 100px;
+}
+.nihao.active .item {
+  width: 100px;
+  height: 100px;
+  background-color: black;
+}

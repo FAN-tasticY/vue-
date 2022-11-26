@@ -123,6 +123,18 @@
             return layer(a-1) + layer(a-2)
         }
         console.log(layer(20));
+
+        //函数调用时候前面啥也不加那么就指向window
+        //这也就证明了 prototype身上的方法 构造函数自身可以访问然后实例对象也可以进行访问的
+        function niguodehaoma(name){
+            this.name = name
+            console.log(this.zhenhao);
+        }
+        niguodehaoma.prototype.zhenhao = '我过得很好 谢谢你的关心'
+        const result = new niguodehaoma('你好你好你好你好你好')
+        console.log(result.name);
+        //实例对象自身找不到的话就通过 __proto__ 去prototype上面找去
+        console.log(result.zhenhao);
     </script>
 </body>
 </html>

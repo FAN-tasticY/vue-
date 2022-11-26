@@ -10,9 +10,7 @@
     <!-- 猜你喜欢 -->
     <Like />
     <!--楼层-->
-    <Floor />
-    <!--楼层-->
-    <Floor />
+    <Floor v-for="(item, index) in floorList" :key="index" :floorListDataObj="item"/>
     <!--商标-->
     <Brand />
   </div>
@@ -25,6 +23,9 @@
   import ListContainer from './ListContainer/ListContainer.vue'
   import Rank from './Rank/Rank.vue'
   import TodayRecommend from './TodayRecommend/TodayRecommend.vue'
+
+  import {mapState} from 'vuex'
+
   export default {
     name: 'Home',
     components: {
@@ -34,6 +35,17 @@
       ListContainer,
       Rank,
       TodayRecommend,
+    },
+    computed:{
+      ...mapState({
+        floorList:state => state.home.floorList
+      })
+    },
+    methods:{
+      test(){
+        console.log('数据拿到了吗');
+        console.log(this.floorList);
+      }
     }
   }
 </script>

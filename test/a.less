@@ -1,0 +1,33 @@
+.nihao{
+    height: 100px;
+    background-color: rebeccapurple;
+    overflow: hidden;
+    // and符加上点的意思就是他且他 那么这个样式才会生效的 缺了任何一个都不会生效的
+    &.zhenhao{
+        width: 100px;
+    }
+    .limiande{
+        background-color: red;
+    }
+    // and符加上冒号的意思就是给当前的这个父元素绑定一个hover类 enmmmm然后就完事了真的是好玩啊哈哈哈
+    &:hover{
+        .limiande{
+            background-color: greenyellow;
+            &:hover{
+                .woaini{
+                    background-color: #adc;
+                }
+            }
+        }
+    }
+    &.active{
+        background-color: yellowgreen;
+        height: 100px;
+        .item{
+            width: 100px;
+            height: 100px;
+            background-color: black;
+        }
+    }
+    
+}

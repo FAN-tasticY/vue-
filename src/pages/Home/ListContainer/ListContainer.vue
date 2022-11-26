@@ -3,28 +3,30 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
+        <!-- <div class="swiper-container" ref="swiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./images/banner1.jpg" />
+            <div class="swiper-slide" v-for="itemObj in bannerList" :key="itemObj.id">
+              <img :src="itemObj.imgUrl" style="height:464px;width:730px"/>
             </div>
-            <!-- <div class="swiper-slide">
-              <img src="./images/banner2.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner3.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner4.jpg" />
-            </div> -->
           </div>
-          <!-- 如果需要分页器 -->
           <div class="swiper-pagination"></div>
-
-          <!-- 如果需要导航按钮 -->
           <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
-        </div>
+        </div> -->
+
+        <!-- banner轮播的另一个版本 -->
+        <!-- 然后就是那个配置对象 我们将其写在data里面就可以了 -->
+        <swiper :options="woaini">
+          <!-- slides -->
+          <swiper-slide v-for="itemObj in bannerList" :key="itemObj.id">
+            <img :src="itemObj.imgUrl" alt="" style="width:730px;height:464px;">
+          </swiper-slide>
+          <!-- Optional controls -->
+          <div class="swiper-pagination"  slot="pagination"></div>
+          <div class="swiper-button-prev" slot="button-prev"></div>
+          <div class="swiper-button-next" slot="button-next"></div>
+          <div class="swiper-scrollbar"   slot="scrollbar"></div>
+        </swiper>
       </div>
       <div class="right">
         <div class="news">
@@ -110,11 +112,93 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex'
+  import Swiper from 'swiper'
+  //这里的swiper对象他是有要求的 这个swiper实例必须要在列表界面显示之后创建才有效果  
   export default {
-    //我真是醉了啊 怎么还有时候这个vue不好使啊真的是服了啊。。。。所以你就是需要坚定你自己的信念啊 坚定你自己的理想信念 有志者自有千方百计 无志者只感千难万难！！！
+    data(){
+      return {
+        data:'哈哈 我永远不会改变',
+        woaini:{
+            //direction: 'vertical', //默认就是水平的
+            loop: true, // 循环模式选项
+            autoplay:{
+              delay:2000,
+              disableOnInteraction:false
+            },
+            // 如果需要分页器
+            pagination: {
+              el: '.swiper-pagination',
+            },
+            
+            // 如果需要前进后退按钮
+            navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            },
+            
+            // 如果需要滚动条
+            scrollbar: {
+              el: '.swiper-scrollbar',
+            },
+        }
+      }
+    },
     name: 'ListContainer',
+
+    
+    //因为现在是静态的所以我们使用mounted，后面编程动态的了然后我们就不使用这个mounted了是吗？
+    // mounted(){
+    //   //状态还没有来呢，那么就是那个空的数组，如果数据回来了，这个列表就变成了那个列表了
+    //   this.mockData = this.$store.state.home.bannerList        
+    // },
+    computed:{
+      // mockData(){
+      //   this.data = this.$store.state.home.bannerList
+      //   return this.$store.state.home.bannerList
+      // },
+      ...mapState({ //映射状态的 好像就是后面的状态发生改变了然后这里的数据就会自动更新的
+        bannerList:state => state.home.bannerList
+      })
+    },
+    watch:{
+      //在这之前这里监视的是bannerList
+      data(){
+        //该函数是保证界面加载完毕了 然后再执行这里面的代码
+        this.$nextTick(()=>{
+          //如果状态数据发生了变化，那么就是写那一套逻辑
+            new Swiper (this.$refs.swiper, {
+            //direction: 'vertical', //默认就是水平的
+            loop: true, // 循环模式选项
+            autoplay:{
+              delay:2000,
+              disableOnInteraction:false
+            },
+            // 如果需要分页器
+            pagination: {
+              el: '.swiper-pagination',
+            },
+            
+            // 如果需要前进后退按钮
+            navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            },
+            
+            // 如果需要滚动条
+            scrollbar: {
+              el: '.swiper-scrollbar',
+            },
+          })
+        })
+        
+      }
+    },
   }
 </script>
+
+
+
 
 <style lang="less" scoped>
   .list-container {

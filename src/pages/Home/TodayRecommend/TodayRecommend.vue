@@ -4,21 +4,12 @@
       <ul class="recommend">
         <li class="clock">
           <div class="time">
-            <img src="./images/clock.png" />
-            <h3>今日推荐</h3>
+            <img :src="today.clock" />
+            <h3>{{today.string}}</h3>
           </div>
         </li>
-        <li class="banner">
-          <img src="./images/today01.png" />
-        </li>
-        <li class="banner">
-          <img src="./images/today02.png" />
-        </li>
-        <li class="banner">
-          <img src="./images/today03.png" />
-        </li>
-        <li class="banner">
-          <img src="./images/today04.png" />
+        <li class="banner" v-for="(item,index) in today.imgs" :key="index">
+          <img :src="item" />
         </li>
       </ul>
     </div>
@@ -26,8 +17,19 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default {
   name: 'TodayRecommend',
+  computed:{
+    ...mapState({
+      today:state => state.home.todayRecommend
+    })
+  },
+  methods:{
+    test(){
+      console.log(this.today);
+    }
+  }
 }
 </script>
 

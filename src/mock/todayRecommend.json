@@ -1,0 +1,10 @@
+{
+    "clock":"/images/clock.png",
+    "string":"今日推荐",
+    "imgs":[
+        "/images/today02.png",
+        "/images/today03.png",
+        "/images/today04.png",
+        "/images/today01.png"
+    ]
+}

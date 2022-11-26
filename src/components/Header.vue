@@ -51,17 +51,15 @@ export default {
     },
     methods:{
         search(){
-            //现在这里是编程式路由导航 使用push或者replace方法 方法在router身上吧
+            
             //这个push执行完之后返回一个promise实例对象
             this.$router.push({
                 name:'YFwoaini',
                 params:{
                     //params参数需要匹配到路径里面然后前后的关键字一定要一一的对应上就可以了
-                    keyword:'920'
+                    keyword:this.inputContent
                 },
-                query:{
-                    content:this.inputContent
-                }
+                query:this.$route.query
             },()=>{})
 
         }
