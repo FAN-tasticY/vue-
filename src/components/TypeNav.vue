@@ -79,9 +79,8 @@ export default {
   methods:{
     toSearch(event){
       const target = event.target
-      //判断只有是a标签的时候才进行跳转
+      //这个dataset拿到手的是:data-xxx绑定的数据 注意大小写问题
       const {categoryname,category1id,category2id,category3id} = target.dataset
-      console.log(target.dataset);
       if(target.tagName.toUpperCase() === 'A'){
         const query = {
           categoryName:categoryname,
@@ -97,10 +96,13 @@ export default {
         this.$router.push({
           name:'YFwoaini',
           query,
-          //如果携带了params参数那么就带着 没携带的话那么就不带着
+          //拿到的params是一个对象 
           params:this.$route.params
         },()=>{})
+
+
       }
+      this.isHideFirst()
     },
     //自己写的有问题 最后一次不执行
     changeState(index){
@@ -144,16 +146,27 @@ export default {
       if(this.$route.path === '/'){
         this.isFirst = true
       }
+    },
+    isHideFirst(){
+      if(this.$route.path === '/'){
+        //如果路径是home的话，那么就展示那个列表 如果不是home那么就展示隐藏
+        this.isFirst = true
+      }
     }
-
   },
   mounted(){
-    if(this.$route.path === '/'){
-      this.isFirst = true
-    }
-  }
+    // if(this.$route.path === '/'){
+    //   this.isFirst = true
+    // }
+    this.isHideFirst()
+  },
 }
+
+//什么逼玩意
+
 </script>
+
+
 
 <style  lang="less" scoped>
 .type-nav {

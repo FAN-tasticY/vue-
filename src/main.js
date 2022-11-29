@@ -6,6 +6,11 @@ import store from './store/store.js'
 import './mock/mock.js'
 //引入过来就是可以建立联系 不建立联系就没法使用啦 只有建立了联系那么才可以使用的
 import './plugins/swiper.js'
+import 'nprogress/nprogress.css'
+
+
+
+
 
 Vue.config.productionTip = false
 

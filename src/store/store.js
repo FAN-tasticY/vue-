@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from 'vuex'
 import home from './modules/home'
+import search from "./modules/search";
 import {getCategoryListFunction} from '../api/index.js'
 Vue.use(Vuex)
 
@@ -29,6 +30,7 @@ export default new Vuex.Store({
     actions,
     getters,
     modules:{
-        home
+        home,
+        search
     }
 })

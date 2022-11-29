@@ -11,9 +11,19 @@ export function getCategoryListFunction(){
 export function getBannerListFunction(){
     return service.get('/getBannerListData')
 }
+//看起来使用了这个axios但是实际上并没有发送ajax请求的
 export function getFloorListFunction(){
     return  mockService.get('/floor')
 }
 export function getTodayRecommendFunction(){
     return mockService.get('/todayRecommend')
+}
+
+//params参数是一个对象
+export function postSearchListFunction(params){
+    return service.post('/postSearchList',params)
+}
+
+export function getSearchSelectorListFunction(params){
+    return service.post('/getSearchSelectorList',params)
 }

@@ -5,7 +5,7 @@ import VueRouter, { isNavigationFailure } from 'vue-router'
 
 import Home from '../pages/Home/Home.vue'
 import Login from '../pages/Login/Login.vue'
-import Search from '../pages/Search/Search.vue'
+import Search from '../pages/Search/index.vue'
 import Register from '../pages/Register/Register.vue'
 
 Vue.use(VueRouter)

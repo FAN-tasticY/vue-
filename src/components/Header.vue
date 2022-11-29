@@ -51,8 +51,11 @@ export default {
     },
     methods:{
         search(){
-            
             //这个push执行完之后返回一个promise实例对象
+            if(!this.inputContent) {
+                alert('搜索内容不能为空')
+                return
+            }
             this.$router.push({
                 name:'YFwoaini',
                 params:{
@@ -61,7 +64,6 @@ export default {
                 },
                 query:this.$route.query
             },()=>{})
-
         }
     }
 }

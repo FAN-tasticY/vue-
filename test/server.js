@@ -1,8 +1,12 @@
 const express = require('express')
+const bodyParser = require('body-parser')
+
+//你可知道有种东西叫做函数对象 这个东西他既是函数他也是对象你知道吗
 const app = express()
 
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
-//真是不好意思了 修改服务器之后我们需要进行重启这样服务器才会生效
 app.get('/getCategoryListData', function (req, res) {
   res.header("Access-Control-Allow-Origin", "*");
   const dataObj = {
@@ -285,6 +289,7 @@ app.get('/getCategoryListData', function (req, res) {
     //然后使用json格式进行数据的传递
     res.send(dataObj)
 })
+
 app.get('/getBannerListData',(request,response)=>{
   const dataObj = {
       code:200,
@@ -292,7 +297,7 @@ app.get('/getBannerListData',(request,response)=>{
       data:[
           {
             id:1,
-            //哈哈 原来是前面的名字搞错了真的就是这样啦 有时候找错真的是麻烦唉
+            //对啊 这里匹配这个路由就是这样的  他再渲染出来之后寻找的就是本地里面的那个数据就完事了
             //imgUrl:'https://www.mercedes-benz.com.cn/content/dam/mb-cn/vehicles/amg-redesign/amg-c-63/1-kv/WKV-C63and63S.jpg' 
             imgUrl:'/images/banner1.jpg'
           },
@@ -313,7 +318,444 @@ app.get('/getBannerListData',(request,response)=>{
   response.send(dataObj)
 })
 
+app.post('/postSearchList',(request,response)=>{
+    console.log('有人请求数据了');
+    const {
+        pageNo,
+        pageSize,
+        category1Id,
+        category2Id,
+        category3Id,
+        categoryName,
+        keyword,
+        props,
+        trademark,
+        order
 
+    } = request.body
+    //数据展示
+    const dataDetailData = {
+        "code": 200,
+        "message": "成功",
+        "data": {
+            "trademarkList": [
+                {
+                    "tmId": 1,
+                    "tmName": "苹果"
+                },
+                {
+                    "tmId": 2,
+                    "tmName": "华为"
+                },
+                {
+                    "tmId": 3,
+                    "tmName": "小米"
+                },
+                {
+                    "tmId": 4,
+                    "tmName": "诺基亚"
+                },
+                {
+                    "tmId": 5,
+                    "tmName": "小辣椒"
+                },
+                {
+                    "tmId": 6,
+                    "tmName": "天语"
+                },
+                {
+                    "tmId": 7,
+                    "tmName": "小黄蜂"
+                },
+                {
+                    "tmId": 8,
+                    "tmName": "荣耀"
+                },
+                {
+                    "tmId": 9,
+                    "tmName": "三星"
+                },
+            ],
+            "attrsList": [
+                {
+                    "attrId": 1,
+                    "attrName": "运行内存",
+                    "attrValueList": [
+                        "4G",
+                        "6G",
+                        "9G",
+                        "16G"
+                    ]
+                },
+                {
+                    "attrId": 2,
+                    "attrName": "电视尺寸",
+                    "attrValueList": [
+                        "100英寸",
+                        "299英寸",
+                        "699英寸"
+                    ]
+                },
+                {
+                    "attrId": 3,
+                    "attrName": "出国旅游",
+                    "attrValueList": [
+                        "英国",
+                        "美国",
+                        "德国",
+                        "法国",
+                        "卢森堡",
+                        "比利时",
+                    ]
+                },
+                {
+                    "attrId": 4,
+                    "attrName": "大学",
+                    "attrValueList": [
+                        "清华大学",
+                        "北京大学",
+                        "南京大学",
+                        "麻省理工",
+                    ]
+                },
+                {
+                    "attrId": 5,
+                    "attrName": "价格",
+                    "attrValueList": [
+                        "4500-11999",
+                        "2800-4499"
+                    ]
+                },
+                {
+                    "attrId": 6,
+                    "attrName": "价格",
+                    "attrValueList": [
+                        "4500-11999",
+                        "2800-4499"
+                    ]
+                },
+                {
+                    "attrId": 7,
+                    "attrName": "价格",
+                    "attrValueList": [
+                        "4500-11999",
+                        "2800-4499"
+                    ]
+                },
+                {
+                    "attrId": 8,
+                    "attrName": "价格",
+                    "attrValueList": [
+                        "4500-11999",
+                        "2800-4499"
+                    ]
+                },
+                {
+                    "attrId": 9,
+                    "attrName": "价格",
+                    "attrValueList": [
+                        "4500-11999",
+                        "2800-4499"
+                    ]
+                },
+                {
+                    "attrId": 11,
+                    "attrName": "价格",
+                    "attrValueList": [
+                        "4500-11999",
+                        "2800-4499"
+                    ]
+                },
+                {
+                    "attrId": 12,
+                    "attrName": "价格",
+                    "attrValueList": [
+                        "4500-11999",
+                        "2800-4499"
+                    ]
+                }
+            ],
+            "goodsList": [
+                {
+                    "id": 1,
+                    "defaultImg": "/images/mobile01.png",
+                    "title": "Apple iPhone 11 (A2223)",
+                    "price": 5499,
+                    "createTime": null,
+                    "tmId": null,
+                    "tmName": null,
+                    "category1Id": null,
+                    "category1Name": null,
+                    "category2Id": null,
+                    "category2Name": null,
+                    "category3Id": null,
+                    "category3Name": null,
+                    "hotScore": 0,
+                    "attrs": null
+                },
+                {
+                    "id": 2,
+                    "defaultImg": "/images/mobile01.png",
+                    "title": "Apple iPhone 11 (A2223)",
+                    "price": 5499,
+                    "createTime": null,
+                    "tmId": null,
+                    "tmName": null,
+                    "category1Id": null,
+                    "category1Name": null,
+                    "category2Id": null,
+                    "category2Name": null,
+                    "category3Id": null,
+                    "category3Name": null,
+                    "hotScore": 0,
+                    "attrs": null
+                },
+                {
+                    "id": 3,
+                    "defaultImg": "/images/mobile01.png",
+                    "title": "Apple iPhone 11 (A2223)",
+                    "price": 5499,
+                    "createTime": null,
+                    "tmId": null,
+                    "tmName": null,
+                    "category1Id": null,
+                    "category1Name": null,
+                    "category2Id": null,
+                    "category2Name": null,
+                    "category3Id": null,
+                    "category3Name": null,
+                    "hotScore": 0,
+                    "attrs": null
+                },
+                {
+                    "id": 4,
+                    "defaultImg": "/images/mobile01.png",
+                    "title": "Apple iPhone 11 (A2223)",
+                    "price": 5499,
+                    "createTime": null,
+                    "tmId": null,
+                    "tmName": null,
+                    "category1Id": null,
+                    "category1Name": null,
+                    "category2Id": null,
+                    "category2Name": null,
+                    "category3Id": null,
+                    "category3Name": null,
+                    "hotScore": 0,
+                    "attrs": null
+                },
+                {
+                    "id": 5,
+                    "defaultImg": "/images/mobile01.png",
+                    "title": "Apple iPhone 11 (A2223)",
+                    "price": 5499,
+                    "createTime": null,
+                    "tmId": null,
+                    "tmName": null,
+                    "category1Id": null,
+                    "category1Name": null,
+                    "category2Id": null,
+                    "category2Name": null,
+                    "category3Id": null,
+                    "category3Name": null,
+                    "hotScore": 0,
+                    "attrs": null
+                },
+                {
+                    "id": 6,
+                    "defaultImg": "/images/mobile01.png",
+                    "title": "Apple iPhone 11 (A2223)",
+                    "price": 5499,
+                    "createTime": null,
+                    "tmId": null,
+                    "tmName": null,
+                    "category1Id": null,
+                    "category1Name": null,
+                    "category2Id": null,
+                    "category2Name": null,
+                    "category3Id": null,
+                    "category3Name": null,
+                    "hotScore": 0,
+                    "attrs": null
+                },
+                {
+                    "id": 7,
+                    "defaultImg": "/images/mobile01.png",
+                    "title": "Apple iPhone 11 (A2223)",
+                    "price": 5499,
+                    "createTime": null,
+                    "tmId": null,
+                    "tmName": null,
+                    "category1Id": null,
+                    "category1Name": null,
+                    "category2Id": null,
+                    "category2Name": null,
+                    "category3Id": null,
+                    "category3Name": null,
+                    "hotScore": 0,
+                    "attrs": null
+                },
+                {
+                    "id": 8,
+                    "defaultImg": "/images/mobile01.png",
+                    "title": "Apple iPhone 11 (A2223)",
+                    "price": 5499,
+                    "createTime": null,
+                    "tmId": null,
+                    "tmName": null,
+                    "category1Id": null,
+                    "category1Name": null,
+                    "category2Id": null,
+                    "category2Name": null,
+                    "category3Id": null,
+                    "category3Name": null,
+                    "hotScore": 0,
+                    "attrs": null
+                },
+                {
+                    "id": 9,
+                    "defaultImg": "/images/mobile01.png",
+                    "title": "Apple iPhone 11 (A2223)",
+                    "price": 5499,
+                    "createTime": null,
+                    "tmId": null,
+                    "tmName": null,
+                    "category1Id": null,
+                    "category1Name": null,
+                    "category2Id": null,
+                    "category2Name": null,
+                    "category3Id": null,
+                    "category3Name": null,
+                    "hotScore": 0,
+                    "attrs": null
+                },
+                {
+                    "id": 10,
+                    "defaultImg": "/images/mobile01.png",
+                    "title": "Apple iPhone 11 (A2223)",
+                    "price": 5499,
+                    "createTime": null,
+                    "tmId": null,
+                    "tmName": null,
+                    "category1Id": null,
+                    "category1Name": null,
+                    "category2Id": null,
+                    "category2Name": null,
+                    "category3Id": null,
+                    "category3Name": null,
+                    "hotScore": 0,
+                    "attrs": null
+                },
+                {
+                    "id": 11,
+                    "defaultImg": "/images/mobile01.png",
+                    "title": "Apple iPhone 11 (A2223)",
+                    "price": 5499,
+                    "createTime": null,
+                    "tmId": null,
+                    "tmName": null,
+                    "category1Id": null,
+                    "category1Name": null,
+                    "category2Id": null,
+                    "category2Name": null,
+                    "category3Id": null,
+                    "category3Name": null,
+                    "hotScore": 0,
+                    "attrs": null
+                },
+                {
+                    "id": 12,
+                    "defaultImg": "/images/mobile01.png",
+                    "title": "Apple iPhone 11 (A2223)",
+                    "price": 5499,
+                    "createTime": null,
+                    "tmId": null,
+                    "tmName": null,
+                    "category1Id": null,
+                    "category1Name": null,
+                    "category2Id": null,
+                    "category2Name": null,
+                    "category3Id": null,
+                    "category3Name": null,
+                    "hotScore": 0,
+                    "attrs": null
+                },
+                {
+                    "id": 13,
+                    "defaultImg": "/images/mobile01.png",
+                    "title": "Apple iPhone 11 (A2223)",
+                    "price": 5499,
+                    "createTime": null,
+                    "tmId": null,
+                    "tmName": null,
+                    "category1Id": null,
+                    "category1Name": null,
+                    "category2Id": null,
+                    "category2Name": null,
+                    "category3Id": null,
+                    "category3Name": null,
+                    "hotScore": 0,
+                    "attrs": null
+                },
+            ],
+            "total": 8,
+            "pageSize": 2,
+            "pageNo": 1,
+            "totalPages": 4
+        },
+        "ok": true
+    }
+
+    //pageSize条件筛选
+    let index = 0
+    dataDetailData.data.goodsList = dataDetailData.data.goodsList.filter((dataObj)=>{
+        index++
+        return index <= pageSize
+    })
+
+    //keyword条件筛选
+    dataDetailData.data.trademarkList = dataDetailData.data.trademarkList.filter((dataObj)=>{
+      if(!keyword) return true
+      return keyword === dataObj.tmName
+    })
+
+    //判断trademarkList是否为空
+    function judgeTrademarkList(){
+        if(dataDetailData.data.trademarkList.length === 0) {
+            dataDetailData.data.trademarkList = [
+                {
+                    tmId:1,
+                    tmName:'暂无此商品'
+                }
+            ]
+        }
+    }
+    judgeTrademarkList()
+
+
+    response.send(dataDetailData)
+})
+
+app.post('/getSearchSelectorList',(request,response)=>{
+    const detailData = {
+        "code":200,
+        "status":"成功了",
+        "data":{
+            "category3Id": "61",
+            "categoryName": "手机",
+            "keyword": "小米",
+            "order": "1:desc",
+            "pageNo": 1,
+            "pageSize": 10,
+            "props": [
+                "1:1700-2799:价格",
+                "2:6.65-6.74英寸:屏幕尺寸"
+            ],
+            "trademark": "4:小米"
+        }
+    }
+    response.send(detailData)
+})
 
 
 app.listen(3000,()=>{
