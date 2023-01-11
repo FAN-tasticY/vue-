@@ -24,33 +24,34 @@
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector :setUpdata="setUpdata"/>
 
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{active:orderArr[0] === '1'}" @click="setOrder('1')">
+                  <a href="javascript:;">
+                    综合<i v-if="orderArr[0] === '1'" class="iconfont" :class="orderArr[1] === 'desc' ? 'icon-jiantou_xiangxia_o' : 'icon-jiantou_xiangshang_o' "></i>
+                  </a>
                 </li>
                 <li>
-                  <a href="#">销量</a>
+                  <a href="javascript:;">销量</a>
                 </li>
                 <li>
-                  <a href="#">新品</a>
+                  <a href="javascript:;">新品</a>
                 </li>
                 <li>
-                  <a href="#">评价</a>
+                  <a href="javascript:;">评价</a>
+                </li>
+                <li :class="{active:orderArr[0] === '2'}" @click="setOrder('2')">
+                  <a href="javascript:;">
+                    价格<i v-if="orderArr[0] === '2'" class="iconfont" :class="orderArr[1] === 'desc' ? 'icon-jiantou_xiangxia_o' : 'icon-jiantou_xiangshang_o' "></i>
+                  </a>
                 </li>
                 <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
-                </li>
-                <li>
-                  <a href="javacript:">{{goodsList.length}}</a>
+                  <a href="javacript:;">{{goodsList.length}}</a>
                 </li>
               </ul>
             </div>
@@ -60,7 +61,9 @@
               <li class="yui3-u-1-5" v-for="item in goodsList" :key="item.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="javascript:"><img :src="item.defaultImg" /></a>
+                    <router-link :to=" '/detail/' + item.id ">
+                      <img :src="item.defaultImg" />
+                    </router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -69,7 +72,10 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a href="javacript:">{{item.title}}</a>
+                    <router-link :to=" '/detail/'+item.id ">
+                      {{item.title}}
+                    </router-link>
+                    <!-- <a href="javacript:">{{item.title}}</a> -->
                   </div>
                   <div class="commit">
                     <i class="command">已有<span>2000</span>人评价</i>
@@ -82,11 +88,12 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
+          <!-- 这个文件是pagition的父元素 -->
+          <!-- <div class="fr page">
             <div class="sui-pagination clearfix">
               <ul>
                 <li class="prev disabled">
-                  <a href="#">«上一页</a>
+                  <a href="javascript:;" @click="test2()">«上一页</a>
                 </li>
                 <li class="active">
                   <a href="#">1</a>
@@ -105,12 +112,22 @@
                 </li>
                 <li class="dotted"><span>...</span></li>
                 <li class="next">
-                  <a href="#">下一页»</a>
+                  <a href="javascript:;" @click="test()"> 下一页»</a>
                 </li>
               </ul>
               <div><span>共10页&nbsp;</span></div>
             </div>
-          </div>
+          </div> -->
+          
+          
+          <myPagination
+          :currentPage = "this.options.pageNo"
+          :total = "total"
+          :showPages = 5
+          :pageSize = "this.options.pageSize"
+          @currentChange = "reqPost"
+          
+          />
         </div>
       </div>
     </div>
@@ -136,25 +153,29 @@
             keyword:'',
 
             props:[],
-            trademark:'',
-            order:'',
+            trademark:'1',
+            order:'1:desc',
             
-            pageNo:'',
-            pageSize:10
+            pageNo:1,
+            pageSize:2
           }
       }
     },
     //在created里面写效率会更高一点
-    created(){
-      this.updataParams()
-      this.reqPost()
-    },
-
+    // created(){
+    //   //typenavm没有发送请求 请求是在这里发的
+    //   this.updataParams()
+    //   this.reqPost()
+    // },
     computed:{
       // ...mapState({
       //   goodsList:state => state.search.searchListData.goodsList || []
       // })
-      ...mapGetters(['goodsList'])
+      ...mapGetters(['goodsList','total']),
+
+      orderArr(){
+        return this.options.order.split(':')
+      }
     },
     methods:{
       updataParams(){
@@ -171,18 +192,55 @@
             category3Id
           }
       },
-      reqPost(){
+      reqPost(page = 1){
         //typeNav那个点击一下只是跳转路由了 请求是在这里发的
         //这里是页面更新了 然后请求就发送了 页面不更新请求就不会发送
+        this.options.pageNo = page
         this.$store.dispatch('postSearchListData',this.options)
       },
       removeCategoryName(){
-        //取消也是发送请求
+        //好像是不发送请求他会认为keyword没有
         this.options.categoryName = ''
         this.reqPost()
+        // this.$route.query = {}    //啊只读参数不可以修改的啊 那我好像知道怎么搞了
+        //为什么这里发送请求了，因为这里是进行了组件的跳转 界面重新显示之后然后重新加载，请求发送了
+        //当前搜索页面跳转搜索页面的话，那么使用replace
+        this.$router.replace({
+          name:'YFwoaini',
+          params:this.$route.params,
+          query:''
+        },()=>{})
       },
       removeKeyword(){
         this.options.keyword = ''
+        this.reqPost()
+        this.$router.replace({
+          name:'YFwoaini',
+          params:'',
+          query:this.$route.query
+        },()=>{})
+
+        this.$bus.$emit('clearInputContent')
+
+      },
+      setUpdata(data){
+        //就是data传递过来了然后就是发送请求啊 先更新数据 然后再发送请求就可以了
+        if(this.options.keyword === data) return
+        this.options.keyword = data
+        this.reqPost()
+      },
+      setOrder(orderFlag){
+        //数组进行解构赋值 可以随意起名字和对不一样
+        let [num,type] = this.orderArr
+        if(num === orderFlag){
+          type = type === 'desc' ? 'asc' : 'desc'
+        }else{
+          num = orderFlag
+          type = 'desc'
+        }
+        // this.options.order = num + ':' + type
+        this.$set(this.options,'order',num+':'+type)  //使用这条语句 不是响应式的可以变为响应式的
+        // this.updataParams()
         this.reqPost()
       }
     },
@@ -190,11 +248,18 @@
     //为什么要使用这个监视呢，因为当前的路由已经是search了所以他就是不会在进行页面的更新了，他只是会进行参数的更新
     //所以我们使用watch监视参数，参数发生改变那么就发送请求
     watch:{
-      $route(newVal,oldVal){
-        this.updataParams()
-        //参数发生变化，重新发送请求，更新状态数据
-        this.reqPost()
+      $route:{
+        handler:function(newVal,oldVal){
+          this.updataParams()
+          this.reqPost()
+        },
+        immediate:true
       }
+      // $route(newVal,oldVal){
+      //   this.updataParams()
+      //   //参数发生变化，重新发送请求，更新状态数据
+      //   this.reqPost()
+      // }
     }
   }
 </script>

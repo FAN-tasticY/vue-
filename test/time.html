@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .father{
+            width: 100%;
+            height: 1000px;
+        }
+        .center{
+            width: 800px;
+            height: 53px;
+            font-weight: bold;
+            font-size: 40px;
+            margin:0 auto;
+            margin-top: 399px;
+        }
+    </style>
+</head>
+<body>
+
+
+
+    <div id="test" class="center"></div>
+    <script>
+        //现在是声明变量
+        let year,month,day,hour,minutes,seconds
+
+        function updataTime(){
+             date = new Date()
+             year = date.getFullYear()
+             month = date.getMonth()+1
+            //这个应该是获取日
+             day = date.getDate()
+             hour = date.getHours()
+             minutes = date.getMinutes()
+             seconds = date.getSeconds()
+        }        
+
+        setInterval(() => {
+            updataTime()
+            document.getElementById('test').innerHTML = '现在是'+year+'年'+month+'月'+day+'日'+hour+'时'+minutes+'分'+seconds+'秒' 
+        }, 1000);
+    </script>
+</body>
+</html>

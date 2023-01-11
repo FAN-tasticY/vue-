@@ -23,7 +23,8 @@ export default {
       this.$store.dispatch('getTodayRecommend')
     },
     methods:{
-
+      //行，就先这样吧，服务器那里咱们就先过去好吧 后面看看再搞一下
+      
     }
     
     

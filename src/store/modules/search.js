@@ -21,6 +21,17 @@ const mutations = {
 
 const actions = {
     async postSearchListData({commit},paramsObj){
+        //非空校验
+        function verify_of_empty(){
+            paramsObj = {...paramsObj}
+            Object.keys(paramsObj).forEach((key)=>{
+                if(paramsObj[key] === '' || (Array.isArray(paramsObj[key]) && paramsObj[key].length === 0 ) ){
+                    delete paramsObj[key]
+                }
+            })
+        }
+        verify_of_empty()
+
         const result = await postSearchListFunction(paramsObj)
         if(result.code === 200){
             commit('RECIVE_SEARCHLISTDATA',result.data)
@@ -36,6 +47,8 @@ const actions = {
 }
 
 const getters = {
+    //可能有人一上来就访问，但是此时数据还没有准备好呢，所以就给他指定的数据
+
     //商品列表
     goodsList(state){
         return state.searchListData.goodsList || []
@@ -47,8 +60,10 @@ const getters = {
     //属性列表
     attrsList(state){
         return state.searchListData.attrsList || []
+    },
+    total(state){
+        return state.searchListData.total || 0
     }
-    //为什么要加上空数组 因为一上来有可能拿不到数据 这样写不至于报错
 }
 
 export default {

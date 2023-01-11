@@ -92,15 +92,27 @@ export default {
         }else if(category3id){
           query.category3Id = category3id
         }
-        //请求肯定是在这里进行发送的 因为这里之外访问不到这个对象的
-        this.$router.push({
-          name:'YFwoaini',
-          query,
-          //拿到的params是一个对象 
-          params:this.$route.params
-        },()=>{})
 
-
+        //判断 如果是其他页跳转search那么就push 如果是search跳search那么就replace
+        if(this.$route.name === 'YFwoaini'){
+          this.$router.replace({
+            name:'YFwoaini',
+            query,
+            params:this.$route.params
+          },()=>{})
+        }else{
+          this.$router.push({
+            name:'YFwoaini',
+            query,
+            params:this.$route.params
+          },()=>{})
+        }
+        // this.$router.push({
+        //   name:'YFwoaini',
+        //   query,
+        //   //拿到的params是一个对象 
+        //   params:this.$route.params
+        // },()=>{})
       }
       this.isHideFirst()
     },
@@ -149,8 +161,9 @@ export default {
     },
     isHideFirst(){
       if(this.$route.path === '/'){
-        //如果路径是home的话，那么就展示那个列表 如果不是home那么就展示隐藏
         this.isFirst = true
+      }else{
+        this.isFirst = false
       }
     }
   },
@@ -158,7 +171,10 @@ export default {
     // if(this.$route.path === '/'){
     //   this.isFirst = true
     // }
+
+    //更改参数页面就不会重新执行了
     this.isHideFirst()
+    
   },
 }
 

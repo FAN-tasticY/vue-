@@ -5,17 +5,23 @@
                 <div class="container">
                     <div class="loginList">
                         <p>尚品汇欢迎您！</p>
-                        <p>
+                        <p v-if="$store.state.user.personInfo">
+                            <!-- <router-link to="/login">登录</router-link> -->
+                            <a href="javascript:;">{{$store.state.user.personInfo}} </a>
+                            <!-- <router-link to="/register" class="register">免费注册</router-link> -->
+                            <a href="javascript:;"> 欢迎您！</a>
+                            <a href="javascript:;" class="register" @click="logout">退出登录</a>
+                        </p>
+                        <p v-else>
                             <span>请</span>
-                            <!-- <a href="###">登录</a> -->
                             <router-link to="/login">登录</router-link>
-                            <!-- <a href="###" class="register">免费注册</a> -->
                             <router-link to="/register" class="register">免费注册</router-link>
                         </p>
                     </div>
                     <div class="typeList">
-                        <a href="###">我的订单</a>
-                        <a href="###">我的购物车</a>
+                        
+                        <router-link to="/center/myorder">我的订单</router-link>
+                        <router-link to="/clearAllMoney">我的购物车</router-link>
                         <a href="###">我的尚品汇</a>
                         <a href="###">尚品汇会员</a>
                         <a href="###">企业采购</a>
@@ -43,6 +49,7 @@
 </template>
 
 <script>
+import {removeToken} from '../utools/uuidFunction'
 export default {
     data(){
         return {
@@ -56,15 +63,61 @@ export default {
                 alert('搜索内容不能为空')
                 return
             }
-            this.$router.push({
-                name:'YFwoaini',
-                params:{
-                    //params参数需要匹配到路径里面然后前后的关键字一定要一一的对应上就可以了
-                    keyword:this.inputContent
-                },
-                query:this.$route.query
-            },()=>{})
+
+            if(this.$route.name === 'YFwoaini'){
+                this.$router.replace({
+                    name:'YFwoaini',
+                    params:{
+                        //params参数需要匹配到路径里面然后前后的关键字一定要一一的对应上就可以了
+                        keyword:this.inputContent
+                    },
+                    query:this.$route.query
+                },()=>{})
+            }else{
+                this.$router.push({
+                    name:'YFwoaini',
+                    params:{
+                        //params参数需要匹配到路径里面然后前后的关键字一定要一一的对应上就可以了
+                        keyword:this.inputContent
+                    },
+                    query:this.$route.query
+                 },()=>{})
+            }
+
+            // this.$router.push({
+            //     name:'YFwoaini',
+            //     params:{
+            //         //params参数需要匹配到路径里面然后前后的关键字一定要一一的对应上就可以了
+            //         keyword:this.inputContent
+            //     },
+            //     query:this.$route.query
+            // },()=>{})
+            
+            
+        },
+        logout(){
+            //删除token 然后将state状态改变为空
+            removeToken()
+            this.$store.dispatch('changeFalse')
+            
         }
+    },
+    //好像是这种加上括号的就是一上来就执行的东西
+    mounted(){
+      this.$bus.$on('clearInputContent',()=>{
+        //为什么使用箭头函数 因为要的就是那个this
+        this.inputContent = ''
+        // this ===> vueComponent
+      })
+        // this.$bus.$on('clearInputContent',function(){
+        //     //现在的this该不会是window吧 然后编程undefined
+        //     this.inputContent = ''
+        //     this ===> vue
+        // })
+    },
+    beforeDestroy(){
+        //绑定事件之后 组件消亡了还需要解绑该组件
+        this.$bus.off('clearInputContent')
     }
 }
 </script>

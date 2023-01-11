@@ -2,7 +2,11 @@ import Vue from "vue";
 import Vuex from 'vuex'
 import home from './modules/home'
 import search from "./modules/search";
-import {getCategoryListFunction} from '../api/index.js'
+import detail from './modules/detail'
+import addCart from './modules/addCart'
+import getCarList from './modules/carList'
+import user from './modules/user.js'
+import getShopingCartInfoList from './modules/getShopingCartInfoList.js'
 Vue.use(Vuex)
 
 const state = {
@@ -31,6 +35,11 @@ export default new Vuex.Store({
     getters,
     modules:{
         home,
-        search
+        search,
+        detail,
+        addCart,
+        getCarList,
+        user,
+        getShopingCartInfoList
     }
 })

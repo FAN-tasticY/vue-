@@ -3,37 +3,68 @@
     <!-- 注册内容 -->
     <div class="register">
       <h3>注册新用户
-        <span class="go">我有账号，去 <a href="login.html" target="_blank">登陆</a>
+        <span class="go">我有账号，去
+           <!-- <a href="login.html" target="_blank">登陆</a> -->
+           <router-link to="/login">登录</router-link>
         </span>
       </h3>
+
       <div class="content">
         <label>手机号:</label>
-        <input type="text" placeholder="请输入你的手机号">
-        <span class="error-msg">错误提示信息</span>
+        <input 
+        name="phone" 
+        v-model="phone"
+        v-validate="{required:true,regex:/^1\d{10}$/}"
+        :class="{invalid:errors.has('phone')}"
+        >
+        <span class="error-msg">{{errors.first('phone')}}</span>
       </div>
+
+
       <div class="content">
-        <label>验证码:</label>
-        <input type="text" placeholder="请输入验证码">
-        <img ref="code" src="http://182.92.128.115/api/user/passport/code" alt="code">
-        <span class="error-msg">错误提示信息</span>
+        <label>验证码</label>
+        <input 
+        name="code" 
+        v-model="code"
+        v-validate="{required:true,regex:/^\d{4}$/}"
+        :class="{invalid:errors.has('code')}"
+        >
+        <img src="" alt="">
+        <span class="error-msg">{{errors.first('code')}}</span>
       </div>
+
+
       <div class="content">
         <label>登录密码:</label>
-        <input type="text" placeholder="请输入你的登录密码">
-        <span class="error-msg">错误提示信息</span>
+        <input 
+        name="password" 
+        v-model="password"
+        v-validate="{required:true,regex:/^\w{6,20}$/}"
+        :class="{invalid:errors.has('password')}"
+        >
+        <span class="error-msg">{{errors.first('password')}}</span>
       </div>
+
+
       <div class="content">
         <label>确认密码:</label>
-        <input type="text" placeholder="请输入确认密码">
-        <span class="error-msg">错误提示信息</span>
+        <input 
+        name="confirmPassword" 
+        v-model="confirmPassword"
+        v-validate="{required:true,regex:/^\w{6,20}$/}"
+        :class="{invalid:errors.has('confirmPassword')}"
+        >
+        <span class="error-msg">{{errors.first('confirmPassword')}}</span>
       </div>
+
+
       <div class="controls">
         <input name="m1" type="checkbox">
         <span>同意协议并注册《尚品汇用户协议》</span>
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg"></span>
       </div>
       <div class="btn">
-        <button>完成注册</button>
+        <button @click.prevent="register">完成注册</button>
       </div>
     </div>
 
@@ -58,7 +89,38 @@
 
 <script>
   export default {
-    name: 'Register'
+    name: 'Register',
+    data() {
+      return {
+        phone:'',
+        code:'',
+        password:'',
+        confirmPassword:''
+      }
+    },
+    methods:{
+      async register(){
+
+        const success = await this.$validator.validateAll()
+
+        if(success){
+          //主要就是发送请求，将数据添加到数据库中
+          let {phone,code,password,confirmPassword} = this
+          if(phone && code && password && confirmPassword){
+            try {
+              await this.$store.dispatch('addUserInfo',{phone,password})
+              alert('用户添加成功，请登录')
+              this.$router.replace('/login')
+            } catch (error) {
+              alert('信息有误，请重新输入')
+            }
+          }
+        }else{
+          alert('信息有误，请核对后再来')
+          //哈哈哈，完事了，太不容易了，现在我们就考虑考虑如何上线啦！！！
+        }
+      }
+    }
   }
 </script>
 

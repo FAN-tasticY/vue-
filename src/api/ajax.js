@@ -2,6 +2,8 @@
 import axios from 'axios'
 import NProgress from 'nprogress'
 // import 'nprogress/nprogress.css'
+import {uuidFunction,getToken} from '../utools/uuidFunction.js'
+
 
 
 
@@ -14,6 +16,9 @@ const service = axios.create({
 //请求拦截器
 service.interceptors.request.use((config)=>{
     NProgress.start()
+    //向请求头中添加id
+    config.headers.userTempId = uuidFunction()
+    config.headers.Token = getToken()
     return config
 })
 

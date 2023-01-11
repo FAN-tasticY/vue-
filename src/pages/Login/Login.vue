@@ -17,11 +17,11 @@
             <form action="##">
               <div class="input-text clearFix">
                 <span></span>
-                <input type="text" placeholder="邮箱/用户名/手机号">
+                <input type="text" placeholder="邮箱/用户名/手机号" v-model="phone">
               </div>
               <div class="input-text clearFix">
                 <span class="pwd"></span>
-                <input type="text" placeholder="请输入密码">
+                <input type="text" placeholder="请输入密码" v-model="password">
               </div>
               <div class="setting clearFix">
                 <label class="checkbox inline">
@@ -30,7 +30,8 @@
                 </label>
                 <span class="forget">忘记密码？</span>
               </div>
-              <button class="btn">登&nbsp;&nbsp;录</button>
+              <!-- 阻止默认行为 -->
+              <button class="btn" @click.prevent="login">登&nbsp;&nbsp;录</button>
             </form>
 
             <div class="call clearFix">
@@ -67,7 +68,38 @@
 
 <script>
 export default {
-
+  name:'login',
+  data() {
+    return {
+      phone:'',
+      password:''
+    }
+  },
+  methods:{
+    async login(){
+      //读取用户数据，只有用户数据存在才可以登录
+      let {phone,password} = this
+      try {
+        await this.$store.dispatch('getUserInfo',{phone,password})
+        alert('登录成功')
+        let destination = this.$route.query.redirect || '/'
+        this.$router.replace(destination)
+      } catch (error) {
+        alert('用户或密码错误')
+      }
+    }
+  },
+  //现在我们来一个组件内守卫 你到底想要的是什么？？？？是不是钱？是钱的话那么你就别墨迹好吗
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if(vm.$store.state.user.token){
+        //token存在的话，那么不许登陆了
+        next('/')
+      }else{
+        next()
+      }
+    })
+  }
 }
 </script>
 
